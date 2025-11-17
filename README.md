@@ -1,76 +1,94 @@
 ## hls-dl
-Универсальная утилита для загрузки видео из HLS-потоков (HTTP Live Streaming).
-### Возможности
-- ✅ Загрузка обычных m3u8-плейлистов
-- ✅ Поддержка защищённых потоков с кастомным шифрованием
-- ✅ Выбор качества видео
-- ✅ Пакетная загрузка
-- ✅ Расширяемая архитектура экстракторов
-- ✅ XOR/AES расшифровка
-### Требования
-pip install requests lxml pycryptodome
-FFmpeg должен быть установлен и доступен в PATH.
-### Установка
+Universal utility for downloading video from HLS streams (HTTP Live Streaming).
+
+### Features
+- ✅ Download standard m3u8 playlists
+- ✅ Support for protected streams with custom encryption
+- ✅ Video quality selection
+- ✅ Batch download
+- ✅ Extensible extractor architecture
+- ✅ XOR/AES decryption
+
+### Requirements
 ```
-git clone https://https://github.com/proglyk/hls-dl.git
+pip install requests lxml pycryptodome
+```
+
+FFmpeg must be installed and available in PATH.
+
+### Installation
+```
+git clone https://github.com/proglyk/hls-dl.git
 cd hls-dl
 pip install -r requirements.txt
 ```
-### Использование
-#### Обычный HLS-поток
+
+### Usage
+
+#### Standard HLS stream
 ```
 python main.py https://test1.flashphoner.com:8445/test/test.m3u8
 ```
-#### Выбор качества
+
+#### Quality selection
 ```
 python main.py https://test1.flashphoner.com:8445/test/test.m3u8 -r 1280x720
 ```
-#### Защищённый поток
+
+#### Protected stream
 ```sh
-python main.py https://play.boomstream.com/VCcNtuiw
--k "your_xor_key"
--o video.mp4
+python main.py https://play.boomstream.com/VCcNtuiw -k "your_xor_key" -o video.mp4
 ```
-#### Пакетная загрузка
+
+#### Batch download
 ```sh
 python main.py -i urls.txt -o downloads/
 ```
-Формат `urls.txt`: \
-https://example.com/video1.m3u8 \
-https://example.com/video2.m3u8 \
-https://example.com/video3.m3u8
-### Архитектура
-hls-dl/ \
-&nbsp;&nbsp;&nbsp;&nbsp;core/ \
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;crypto.py \
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;downloader.py \
-&nbsp;&nbsp;&nbsp;&nbsp;extractors/ \
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;base.py \
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;generic.py \
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;protected.py \
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;boomstream.py \
-&nbsp;&nbsp;&nbsp;&nbsp;main.py \
-&nbsp;&nbsp;&nbsp;&nbsp;requirements.txt \
-&nbsp;&nbsp;&nbsp;&nbsp;README.md
 
-### Создание своего экстрактора
+`urls.txt` format:
+```
+https://example.com/video1.m3u8
+https://example.com/video2.m3u8
+https://example.com/video3.m3u8
+```
+
+### Architecture
+```
+hls-dl/
+    core/
+        crypto.py          # Cryptographic utilities
+        downloader.py      # Base downloader
+    extractors/
+        base.py            # Base extractor class
+        generic.py         # For standard m3u8
+        protected.py       # For protected streams
+        boomstream.py      # For Boomstream (optional)
+    main.py                # CLI interface
+    requirements.txt
+    README.md
+```
+
+### Creating your own extractor
 ```python
 from extractors.base import BaseExtractor
 
 class MyExtractor(BaseExtractor):
-def extract(self):
-    # Ваша логика извлечения m3u8 URL
-    return {
-        'm3u8_url': 'https://...',
-        'title': 'video_title',
-        'headers': {'Referer': '...'}
-    }
-@staticmethod
-def can_handle(url):
-    return 'myservice.com' in url
+    def extract(self):
+        # Your logic for extracting m3u8 URL
+        return {
+            'm3u8_url': 'https://...',
+            'title': 'video_title',
+            'headers': {'Referer': '...'}
+        }
+
+    @staticmethod
+    def can_handle(url):
+        return 'myservice.com' in url
 ```
-### Лицензия
+
+### License
 MIT License
+
 ### Disclaimer
-Эта утилита предназначена только для образовательных целей. 
-Уважайте авторские права и условия использования контента.
+This utility is intended for educational purposes only.
+Respect copyrights and content usage terms.
