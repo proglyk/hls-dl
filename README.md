@@ -1,5 +1,7 @@
 ## hls-dl
-Universal utility for downloading video from HLS streams (HTTP Live Streaming).
+Universal utility for downloading video from HLS streams (HTTP Live Streaming). \
+
+P.S. Project under development. API not stable. Uses for your own risks
 
 ### Features
 - ✅ Download standard m3u8 playlists
